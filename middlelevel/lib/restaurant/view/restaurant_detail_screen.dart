@@ -4,6 +4,8 @@ import 'package:middlelevel/common/layout/default_layout.dart';
 import 'package:middlelevel/product/component/product_card.dart';
 import 'package:middlelevel/restaurant/component/restaurant_card.dart';
 import 'package:middlelevel/restaurant/model/restaurant_detail_model.dart';
+import 'package:middlelevel/restaurant/model/restaurant_model.dart';
+import 'package:middlelevel/restaurant/provider/restaurant_provider.dart';
 import 'package:middlelevel/restaurant/repository/restaurant_repository.dart';
 
 class RestaurantDetailScreen extends ConsumerWidget {
@@ -16,38 +18,28 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DefaultLayout(
-      title: '불타는 떡볶이',
-      child: FutureBuilder<RestaurantDetailModel>(
-        future: ref.watch(restaurantRepositoryProvider).getRestaurantDetail(
-              id: id,
-            ),
-        builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          }
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    final state = ref.watch(restaurantDetailProvider(id));
 
-          return CustomScrollView(
-            slivers: [
-              renderTop(
-                model: snapshot.data!,
-              ),
-              renderLabel(),
-              renderProducts(
-                products: snapshot.data!.products,
-              ),
-            ],
-          );
-        },
-      ),
-    );
+    if (state == null) {
+      return const DefaultLayout(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    return DefaultLayout(
+        title: '불타는 떡볶이',
+        child: CustomScrollView(
+          slivers: [
+            renderTop(
+              model: state,
+            ),
+            // renderLabel(),
+            // renderProducts(
+            //   products: snapshot.data!.products,
+            // ),
+          ],
+        ));
   }
 
   SliverPadding renderProducts({
@@ -85,7 +77,7 @@ class RestaurantDetailScreen extends ConsumerWidget {
   }
 
   SliverToBoxAdapter renderTop({
-    required RestaurantDetailModel model,
+    required RestaurantModel model,
   }) {
     return SliverToBoxAdapter(
       child: RestaurantCard.fromModel(
