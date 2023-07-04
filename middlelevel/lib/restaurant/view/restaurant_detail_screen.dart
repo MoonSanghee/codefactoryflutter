@@ -8,17 +8,31 @@ import 'package:middlelevel/restaurant/model/restaurant_model.dart';
 import 'package:middlelevel/restaurant/provider/restaurant_provider.dart';
 import 'package:middlelevel/restaurant/repository/restaurant_repository.dart';
 
-class RestaurantDetailScreen extends ConsumerWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   final String id;
 
   const RestaurantDetailScreen({
     required this.id,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(restaurantDetailProvider(id));
+  ConsumerState<RestaurantDetailScreen> createState() =>
+      _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState
+    extends ConsumerState<RestaurantDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(restaurantDetailProvider(widget.id));
 
     if (state == null) {
       return const DefaultLayout(
@@ -27,50 +41,57 @@ class RestaurantDetailScreen extends ConsumerWidget {
         ),
       );
     }
-    return DefaultLayout(
-        title: '불타는 떡볶이',
-        child: CustomScrollView(
-          slivers: [
-            renderTop(
-              model: state,
-            ),
-            // renderLabel(),
-            // renderProducts(
-            //   products: snapshot.data!.products,
-            // ),
-          ],
-        ));
-  }
 
-  SliverPadding renderProducts({
-    required List<RestaurantProductModel> products,
-  }) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          final model = products[index];
-          return Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: ProductCard.fromModel(
-              model: model,
+    return DefaultLayout(
+      title: '불타는 떡볶이',
+      child: CustomScrollView(
+        slivers: [
+          renderTop(
+            model: state,
+          ),
+          if (state is RestaurantDetailModel) renderLabel(),
+          if (state is RestaurantDetailModel)
+            renderProducts(
+              products: state.products,
             ),
-          );
-        }, childCount: products.length),
+        ],
       ),
     );
   }
 
   SliverPadding renderLabel() {
     return const SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverToBoxAdapter(
         child: Text(
           '메뉴',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 18.0,
             fontWeight: FontWeight.w500,
           ),
+        ),
+      ),
+    );
+  }
+
+  SliverPadding renderProducts({
+    required List<RestaurantProductModel> products,
+  }) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final model = products[index];
+
+            return Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ProductCard.fromModel(
+                model: model,
+              ),
+            );
+          },
+          childCount: products.length,
         ),
       ),
     );
