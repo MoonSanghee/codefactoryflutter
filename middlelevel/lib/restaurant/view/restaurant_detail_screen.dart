@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:middlelevel/common/const/data.dart';
-import 'package:middlelevel/common/dio/dio.dart';
 import 'package:middlelevel/common/layout/default_layout.dart';
 import 'package:middlelevel/product/component/product_card.dart';
 import 'package:middlelevel/restaurant/component/restaurant_card.dart';
@@ -16,21 +14,14 @@ class RestaurantDetailScreen extends ConsumerWidget {
     super.key,
   });
 
-  Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final repository =
-        RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
-
-    return repository.getRestaurantDetail(id: id);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '불타는 떡볶이',
       child: FutureBuilder<RestaurantDetailModel>(
-        future: getRestaurantDetail(ref),
+        future: ref.watch(restaurantRepositoryProvide).getRestaurantDetail(
+              id: id,
+            ),
         builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
           if (snapshot.hasError) {
             return Center(

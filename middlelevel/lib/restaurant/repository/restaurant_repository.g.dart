@@ -17,19 +17,19 @@ class _RestaurantRepository implements RestaurantRepository {
 
   @override
   Future<CursorPagination<RestaurantModel>> paginate() async {
-    const _extra = <String, dynamic>{};
+    const extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
+    final headers = <String, dynamic>{r'accessToken': 'true'};
+    headers.removeWhere((k, v) => v == null);
+    final data = <String, dynamic>{};
+    final result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CursorPagination<RestaurantModel>>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
+            Options(method: 'GET', headers: headers, extra: extra)
                 .compose(_dio.options, '/',
-                    queryParameters: queryParameters, data: _data)
+                    queryParameters: queryParameters, data: data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CursorPagination<RestaurantModel>.fromJson(
-      _result.data!,
+      result.data!,
       (json) => RestaurantModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
@@ -37,18 +37,18 @@ class _RestaurantRepository implements RestaurantRepository {
 
   @override
   Future<RestaurantDetailModel> getRestaurantDetail({required id}) async {
-    const _extra = <String, dynamic>{};
+    const extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': 'true'};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
+    final headers = <String, dynamic>{r'accessToken': 'true'};
+    headers.removeWhere((k, v) => v == null);
+    final data = <String, dynamic>{};
+    final result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<RestaurantDetailModel>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
+            Options(method: 'GET', headers: headers, extra: extra)
                 .compose(_dio.options, '/${id}',
-                    queryParameters: queryParameters, data: _data)
+                    queryParameters: queryParameters, data: data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = RestaurantDetailModel.fromJson(_result.data!);
+    final value = RestaurantDetailModel.fromJson(result.data!);
     return value;
   }
 
