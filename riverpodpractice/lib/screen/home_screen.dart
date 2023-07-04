@@ -3,6 +3,8 @@ import 'package:riverpodpractice/layout/default_layout.dart';
 import 'package:riverpodpractice/screen/auto_dispose_modifier_screen.dart';
 import 'package:riverpodpractice/screen/family_modifier_screen.dart';
 import 'package:riverpodpractice/screen/futuer_provider_screen.dart';
+import 'package:riverpodpractice/screen/listen_provider_screen.dart';
+import 'package:riverpodpractice/screen/select_provider_screen.dart';
 import 'package:riverpodpractice/screen/state_notifier_provider_screen.dart';
 import 'package:riverpodpractice/screen/state_provider_screen.dart';
 import 'package:riverpodpractice/screen/stream_provider_screen.dart';
@@ -86,6 +88,30 @@ class HomeScreen extends StatelessWidget {
             },
             child: const Text(
               'AutoDisposeModefireScreen',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ListenProviderScreen(),
+                ),
+              );
+            },
+            child: const Text(
+              'ListenProviderScreen',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const SelectProviderScreen(),
+                ),
+              );
+            },
+            child: const Text(
+              'SelectProviderScreen',
             ),
           ),
         ],
