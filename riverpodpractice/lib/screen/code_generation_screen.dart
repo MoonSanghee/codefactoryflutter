@@ -67,6 +67,14 @@ class CodeGenerationScreen extends ConsumerWidget {
               ),
             ],
           ),
+          ElevatedButton(
+            onPressed: () {
+              ref.invalidate(gStateNotifierProvider);
+            },
+            child: const Text(
+              'Invalidate',
+            ),
+          ),
         ],
       ),
     );
