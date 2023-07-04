@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:middlelevel/common/const/data.dart';
 import 'package:middlelevel/common/dio/dio.dart';
 import 'package:middlelevel/common/model/cursor_pagination_model.dart';
+import 'package:middlelevel/common/model/pagination_params.dart';
 import 'package:middlelevel/restaurant/model/restaurant_detail_model.dart';
 import 'package:middlelevel/restaurant/model/restaurant_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -31,7 +32,9 @@ abstract class RestaurantRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<CursorPagination<RestaurantModel>> paginate();
+  Future<CursorPagination<RestaurantModel>> paginate({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   // http://$ip/restaurant/:id
   @GET('/{id}')

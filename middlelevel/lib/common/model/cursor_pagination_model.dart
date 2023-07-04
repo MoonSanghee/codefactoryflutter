@@ -45,7 +45,7 @@ class CursorPagintionMeta {
       _$CursorPagintionMetaFromJson(json);
 }
 
-class CursorPaginationRefetching extends CursorPagination {
+class CursorPaginationRefetching<T> extends CursorPagination<T> {
   CursorPaginationRefetching({
     required super.meta,
     required super.data,
@@ -53,7 +53,7 @@ class CursorPaginationRefetching extends CursorPagination {
 }
 // 새로고침 할 때
 
-class CursorPaginationFetchingMore extends CursorPagination {
+class CursorPaginationFetchingMore<T> extends CursorPagination<T> {
   CursorPaginationFetchingMore({
     required super.meta,
     required super.data,
