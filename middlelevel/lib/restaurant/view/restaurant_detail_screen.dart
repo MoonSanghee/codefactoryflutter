@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:middlelevel/common/layout/default_layout.dart';
-import 'package:middlelevel/component/rating_card.dart';
+import 'package:middlelevel/rating/component/rating_card.dart';
 import 'package:middlelevel/product/component/product_card.dart';
 import 'package:middlelevel/restaurant/component/restaurant_card.dart';
 import 'package:middlelevel/restaurant/model/restaurant_detail_model.dart';
