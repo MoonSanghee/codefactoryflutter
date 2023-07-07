@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:middlelevel/common/layout/default_layout.dart';
+import 'package:middlelevel/common/model/cursor_pagination_model.dart';
 import 'package:middlelevel/rating/component/rating_card.dart';
 import 'package:middlelevel/product/component/product_card.dart';
+import 'package:middlelevel/rating/model/rating_model.dart';
 import 'package:middlelevel/restaurant/component/restaurant_card.dart';
 import 'package:middlelevel/restaurant/model/restaurant_detail_model.dart';
 import 'package:middlelevel/restaurant/model/restaurant_model.dart';
 import 'package:middlelevel/restaurant/provider/restaurant_provider.dart';
+import 'package:middlelevel/restaurant/provider/restaurant_rating_provider.dart';
 import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -34,6 +37,7 @@ class _RestaurantDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(restaurantDetailProvider(widget.id));
+    final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
 
     if (state == null) {
       return const DefaultLayout(
@@ -56,19 +60,29 @@ class _RestaurantDetailScreenState
             renderProducts(
               products: state.products,
             ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: RatingCard(
-                avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
-                images: [],
-                rating: 4,
-                email: 'jc@codefactory.ai',
-                content: '맛있습니다.',
-              ),
+          if (ratingsState is CursorPagination<RatingModel>)
+            renderRatings(
+              models: ratingsState.data,
             ),
-          ),
         ],
+      ),
+    );
+  }
+
+  SliverPadding renderRatings({
+    required List<RatingModel> models,
+  }) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (_, index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: RatingCard.fromModel(
+                    model: models[index],
+                  ),
+                ),
+            childCount: models.length),
       ),
     );
   }
