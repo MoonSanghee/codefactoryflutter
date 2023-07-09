@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:middlelevel/common/model/mode_with_id.dart';
+import 'package:middlelevel/common/model/model_with_id.dart';
 import 'package:middlelevel/common/utils/data_utils.dart';
 import 'package:middlelevel/user/model/user_model.dart';
 
