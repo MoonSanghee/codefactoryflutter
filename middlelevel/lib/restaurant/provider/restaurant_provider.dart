@@ -3,6 +3,7 @@ import 'package:middlelevel/common/model/cursor_pagination_model.dart';
 import 'package:middlelevel/common/provider/pagination_provider.dart';
 import 'package:middlelevel/restaurant/model/restaurant_model.dart';
 import 'package:middlelevel/restaurant/repository/restaurant_repository.dart';
+import 'package:collection/collection.dart';
 
 final restaurantDetailProvider =
     Provider.family<RestaurantModel?, String>((ref, id) {
@@ -12,7 +13,7 @@ final restaurantDetailProvider =
     return null;
   }
 
-  return state.data.firstWhere((element) => element.id == id);
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 final restaurantProvider =
@@ -50,12 +51,21 @@ class RestaurantStateNotifier
 
     final resp = await repository.getRestaurantDetail(id: id);
 
-    state = pState.copywith(
-      data: pState.data
-          .map<RestaurantModel>(
-            (e) => e.id == id ? resp : e,
-          )
-          .toList(),
-    );
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      state = pState.copywith(
+        data: <RestaurantModel>[
+          ...pState.data,
+          resp,
+        ],
+      );
+    } else {
+      state = pState.copywith(
+        data: pState.data
+            .map<RestaurantModel>(
+              (e) => e.id == id ? resp : e,
+            )
+            .toList(),
+      );
+    }
   }
 }
