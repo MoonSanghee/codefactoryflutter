@@ -8,9 +8,22 @@ import 'package:gorouterpractice/screens/6_path_param_screen.dart';
 import 'package:gorouterpractice/screens/7_query_parameter.dart';
 import 'package:gorouterpractice/screens/8_nested_child_screen.dart';
 import 'package:gorouterpractice/screens/8_nested_screen.dart';
+import 'package:gorouterpractice/screens/9_login_screen.dart';
+import 'package:gorouterpractice/screens/9_private_screen.dart';
 import 'package:gorouterpractice/screens/root_screen.dart';
 
+// 로그인이 됐는지 안 됐는지
+// true - login OK / false - login NO
+bool authState = false;
+
 final router = GoRouter(
+  redirect: (context, state) {
+    if (state.location == '/login/private' && !authState) {
+      return '/login';
+    }
+
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',
@@ -95,7 +108,34 @@ final router = GoRouter(
               ),
             ),
           ],
-        )
+        ),
+        GoRoute(
+          path: 'login',
+          builder: (_, state) => const LoginScreen(),
+          routes: [
+            GoRoute(
+              path: 'private',
+              builder: (_, state) => const PrivateScreen(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'login2',
+          builder: (_, state) => const LoginScreen(),
+          routes: [
+            GoRoute(
+              path: 'private',
+              builder: (_, state) => const PrivateScreen(),
+              redirect: (context, state) {
+                if (!authState) {
+                  return '/login2';
+                }
+
+                return null;
+              },
+            ),
+          ],
+        ),
       ],
     ),
   ],
