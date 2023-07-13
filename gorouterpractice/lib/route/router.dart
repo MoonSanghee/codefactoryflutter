@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gorouterpractice/screens/10_trasition_screen_1.dart';
+import 'package:gorouterpractice/screens/10_trasition_screen_2.dart';
+import 'package:gorouterpractice/screens/11_error_screen.dart';
 import 'package:gorouterpractice/screens/1_basic_screen.dart';
 import 'package:gorouterpractice/screens/2_named_screen.dart';
 import 'package:gorouterpractice/screens/3_push_screen.dart';
@@ -136,7 +140,30 @@ final router = GoRouter(
             ),
           ],
         ),
+        GoRoute(
+          path: 'transition',
+          builder: (_, state) => const TransitionScreenOne(),
+          routes: [
+            GoRoute(
+              path: 'detail',
+              pageBuilder: (_, state) => CustomTransitionPage(
+                transitionsBuilder:
+                    ((context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                }),
+                child: const TransitionScreenTwo(),
+              ),
+            )
+          ],
+        ),
       ],
     ),
   ],
+  errorBuilder: (context, state) => ErrorScreen(
+    error: state.error.toString(),
+  ),
+  debugLogDiagnostics: true,
 );
