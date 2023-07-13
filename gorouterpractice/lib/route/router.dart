@@ -4,6 +4,8 @@ import 'package:gorouterpractice/screens/2_named_screen.dart';
 import 'package:gorouterpractice/screens/3_push_screen.dart';
 import 'package:gorouterpractice/screens/4_pop_base_screen.dart';
 import 'package:gorouterpractice/screens/5_pop_return_screen.dart';
+import 'package:gorouterpractice/screens/6_path_param_screen.dart';
+import 'package:gorouterpractice/screens/7_query_parameter.dart';
 import 'package:gorouterpractice/screens/root_screen.dart';
 
 final router = GoRouter(
@@ -34,18 +36,39 @@ final router = GoRouter(
           },
         ),
         GoRoute(
-            path: 'pop',
-            builder: (context, state) {
-              return const PopBaseScreen();
-            },
-            routes: [
-              GoRoute(
-                path: 'return',
-                builder: (context, state) {
-                  return const PopReturnScreen();
-                },
-              )
-            ]),
+          path: 'pop',
+          builder: (context, state) {
+            return const PopBaseScreen();
+          },
+          routes: [
+            GoRoute(
+              path: 'return',
+              builder: (context, state) {
+                return const PopReturnScreen();
+              },
+            )
+          ],
+        ),
+        GoRoute(
+          path: 'path_param/:id',
+          builder: (context, state) {
+            return const PathParamScreen();
+          },
+          routes: [
+            GoRoute(
+              path: ':name',
+              builder: (context, state) {
+                return const PathParamScreen();
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'query_param',
+          builder: (context, state) {
+            return const QueryParameterScreen();
+          },
+        ),
       ],
     ),
   ],
